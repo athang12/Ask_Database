@@ -1,0 +1,32 @@
+def strongest_string(m, s):
+    def distribute(s, m, prefix=""):
+        if m == 1:
+            return [prefix + s]
+        smallest_strings = []
+        for i in range(1, len(s) - m + 2):  # Ensure enough characters for remaining guests
+            new_prefix = prefix + s[:i]
+            remaining = distribute(s[i:], m - 1)
+            smallest_strings.append(min(remaining))
+        return smallest_strings
+
+    def find_strongest_string(m, s):
+        strongest = ""
+        n = len(s)
+        for i in range(n):
+            smallest = distribute(s[i:], m)
+            if len(smallest) >= m and (not strongest or max(smallest) > strongest):
+                strongest = max(smallest)
+        return strongest
+
+    return find_strongest_string(m, sorted(s))
+
+# Example usage:
+m = 3
+s = "good"
+result = strongest_string(m, s)
+print(result)  # Output: gd
+
+m = 4
+s = "abacadae"
+result = strongest_string(m, s)
+print(result)  # Output: baaaa
